@@ -9,7 +9,7 @@
       tex = pkgs.texlive.combine {
         inherit (pkgs.texlive) scheme-basic latexmk pgf pdfpages pdflscape tikzpagenodes ifoddpage;
       };
-      makePrintable = input: name: front: lastpage: ruecken: bg: pkgs.stdenvNoCC.mkDerivation {
+      makePrintable = input: name: front: source: pkgs.stdenvNoCC.mkDerivation {
         inherit name;
         nativeBuildInputs = [ pkgs.poppler_utils pkgs.imagemagick tex ];
         src = self;
@@ -21,12 +21,11 @@
           mkdir -p .cache/texmf-var
           env TEXMFHOME=.cache TEXMFVAR=.cache/texmf-var \
             ${tex}/bin/latexmk -lualatex -interaction=nonstopmode \
-            -pretex='\def\buchruecken{${ruecken}}\def\lastpage{${builtins.toString lastpage}}\newif\ifusebg\usebg${pkgs.lib.boolToString bg}' -usepretex \
-            book.tex
+            ${source}.tex
         '';
         installPhase = ''
           mkdir $out
-          mv book.pdf $out/${name}.pdf
+          mv ${source}.pdf $out/${name}.pdf
         '';
       };
       liturgiumFront = ''
@@ -61,8 +60,8 @@
       '';
     in {
       packages = {
-        liberLiturgium = makePrintable ./LiberLiturgium.pdf "LiberLiturgium-print" liturgiumFront 369 "2.3cm" false;
-        liberCantiones = makePrintable ./LiberCantiones.pdf "LiberCantiones-print" cantionesFront 305 "1.9cm" true;
+        liberLiturgium = makePrintable ./LiberLiturgium.pdf "LiberLiturgium-print" liturgiumFront "ll";
+        liberCantiones = makePrintable ./LiberCantiones.pdf "LiberCantiones-print" cantionesFront "lc";
       };
     });
 }

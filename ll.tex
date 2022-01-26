@@ -1,0 +1,17 @@
+\documentclass{minimal}
+
+\usepackage{calc}
+\usepackage[paperwidth=38cm+2.3cm, paperheight=275mm, margin=0cm]{geometry}
+
+\usepackage{graphicx}
+\usepackage{pdfpages}
+
+\begin{document}
+  \parindent 0pt
+  \includegraphics[height=275mm]{full.jpg}
+  \clearpage
+  \newgeometry{total={176mm, 246mm}, margin=0cm}
+  \pagewidth=176mm
+  \pageheight=246mm
+  \includepdf[scale=0.88, pages=2-369, offset=-11.37cm 1.45cm]{input.pdf}
+\end{document}
